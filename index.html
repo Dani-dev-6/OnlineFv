@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <title>Dani Fv</title>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <title>Onlinefv</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
+      font-family: 'Noto Sans KR', sans-serif;
       margin: 0;
-      background: #f8f9fa;
-      font-family: 'Segoe UI', 'Malgun Gothic', Arial, sans-serif;
+      padding: 0;
+      background: #f7f7f7;
     }
-    .center-container {
-      display: flex;
-      justify-content: center;  /* 수평 가운데 */
-      align-items: center;      /* 수직 가운데 */
-      height: 25vh;             /* 각 영역이 화면의 1/4 차지 */
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      padding: 32px;
+      box-sizing: border-box;
     }
-    .center-content {
+    h3 {
+      margin: 0 0 2% 0;
+      font-size: 1.4rem;
+      color: #222;
       text-align: center;
     }
-    .center-content img {
-      width: 10%;   /* 버튼(이미지) 매우 작게 */
-      height: 10%;
-      object-fit: contain;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: transform 0.12s;
-      vertical-align: middle;
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2%;
     }
-    .center-content img:hover {
-      transform: scale(1.12) rotate(-3deg);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    button {
+      margin: 0;
+      padding: 14px 0;
+      border: none;
+      border-radius: 8px;
+      background: #4f8cff;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
+      transition: background 0.2s;
     }
-    .app-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #2d2d2d;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 8px #eee;
+    button:not(:last-child) {
+      /* 간격은 gap으로 처리 */
     }
-    .center-content h3 {
-  margin: 0;
-  padding: 0;
-}
+    button:hover {
+      background: #3768c5;
+    }
   </style>
 </head>
 <body>
-  <div class="center-container">
-    <div class="center-content app-title"><h2>Dani Fv</h2></div>
-  </div>
-  <div class="center-container">
-    <div class="center-content">
-      <a href="./excelviewer.html" title="엑셀 뷰어">
-        <img src="excel.png" alt="엑셀 뷰어 버튼"/>
-      </a>
-      <a href="./wordviewer.html" title="워드 뷰어">
-        <img src="word.png" alt="워드 뷰어 버튼"/>
-      </a>
+  <div class="container">
+    <h3>원하는 기능을 선택하세요</h3>
+    <div class="btn-group">
+      <button type="button">기능 1</button>
+      <button type="button">기능 2</button>
+      <button type="button">기능 3</button>
     </div>
   </div>
 </body>
