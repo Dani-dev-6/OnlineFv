@@ -30,21 +30,13 @@
       display: flex;
       flex-direction: column;
       gap: 2%;
+      align-items: center;
     }
-    button {
-      margin: 0;
-      padding: 14px 0;
-      border: none;
-      border-radius: 8px;
-      background: #4f8cff;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #3768c5;
+    .btn-group img {
+      height: 1.2rem; /* h4 크기와 동일 */
+      width: auto;
+      display: inline-block;
+      vertical-align: middle;
     }
   </style>
 </head>
@@ -52,8 +44,8 @@
   <div class="container">
     <h3>Dani fv</h3>
     <div class="btn-group">
-      <a href="./wordviewer.html"><img src="word.png"/></a>
-      <a href="./excelviewer.html"><img src="excel.png"></a>
+      <a href="./wordviewer.html"><img src="word.png" alt="워드 뷰어" /></a>
+      <a href="./excelviewer.html"><img src="excel.png" alt="엑셀 뷰어" /></a>
     </div>
   </div>
 </body>
