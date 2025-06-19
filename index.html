@@ -28,15 +28,37 @@
     }
     .btn-group {
       display: flex;
-      flex-direction: column;
-      gap: 2%;
+      flex-direction: row;   /* 가로 정렬 */
+      gap: 24px;             /* 버튼 사이 간격 */
+      justify-content: center;
       align-items: center;
+      margin-top: 20px;
     }
-    .btn-group img {
-      height: 1.2rem; /* h4 크기와 동일 */
-      width: auto;
-      display: inline-block;
-      vertical-align: middle;
+    .circle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.2rem;   /* h2.5 크기 (2.5rem)보다 약간 크게, 패딩 여유 */
+      height: 3.2rem;
+      border-radius: 50%;  /* 원형 */
+      background: #e9f0ff;
+      box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+      border: none;
+      transition: box-shadow 0.2s, background 0.2s;
+      cursor: pointer;
+      padding: 0;
+      text-align: center;
+    }
+    .circle-btn:hover {
+      background: #d0e1ff;
+      box-shadow: 0 4px 16px rgba(79,140,255,0.25);
+    }
+    .circle-btn img {
+      width: 2.5rem;   /* h2.5 크기 */
+      height: 2.5rem;
+      border-radius: 50%;  /* 이미지도 원형 */
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -44,8 +66,12 @@
   <div class="container">
     <h3>Dani fv</h3>
     <div class="btn-group">
-      <a href="./wordviewer.html"><img src="word.png" alt="워드 뷰어" /></a>
-      <a href="./excelviewer.html"><img src="excel.png" alt="엑셀 뷰어" /></a>
+      <a href="./wordviewer.html" class="circle-btn">
+        <img src="word.png" alt="워드 뷰어" />
+      </a>
+      <a href="./excelviewer.html" class="circle-btn">
+        <img src="excel.png" alt="엑셀 뷰어" />
+      </a>
     </div>
   </div>
 </body>
