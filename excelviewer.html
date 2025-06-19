@@ -12,100 +12,121 @@
   <script src="https://cdn.jsdelivr.net/npm/luckysheet/dist/luckysheet.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/luckysheet/dist/plugins/js/plugin.js"></script>
 
-  <!-- SheetJS (xlsx) -->
+  <!-- SheetJS -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <style>
-    body, html, #luckysheet {
-      height: 100vh; margin: 0; padding: 0;
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Noto Sans KR', sans-serif;
+      display: flex;
+      flex-direction: column;
     }
-    #luckysheet { width: 100%; }
     #upload-container {
       padding: 10px;
       background: #f0f0f0;
       border-bottom: 1px solid #ccc;
-      font-family: 'Noto Sans KR', sans-serif;
+    }
+    #luckysheet {
+      flex-grow: 1;
+      height: 0; /* flex-grow로 높이 채우기 */
     }
   </style>
 </head>
 <body>
 
-<div id="upload-container">
-  <input type="file" id="input-excel" accept=".xlsx,.xls" />
-  <span>엑셀 파일 선택 (.xlsx, .xls)</span>
-</div>
+  <div id="upload-container">
+    <input type="file" id="input-excel" accept=".xlsx,.xls" />
+    <span>엑셀 파일 선택 (.xlsx, .xls)</span>
+  </div>
 
-<div id="luckysheet"></div>
+  <div id="luckysheet"></div>
 
-<script>
-  // 엑셀 시트를 luckysheet 데이터 형식으로 변환하는 함수
-  function excelToLuckysheet(workbook) {
-    const sheets = workbook.SheetNames;
-    const luckysheetData = [];
+  <script>
+    // Luckysheet 전역 변수 선언 (한번만 초기화하기 위함)
+    let luckysheetInitialized = false;
 
-    sheets.forEach((sheetName, idx) => {
-      const worksheet = workbook.Sheets[sheetName];
-      const json = XLSX.utils.sheet_to_json(worksheet, {header:1, raw:false});
+    // 엑셀 시트를 luckysheet 데이터 형식으로 변환하는 함수
+    function excelToLuckysheet(workbook) {
+      const sheets = workbook.SheetNames;
+      const luckysheetData = [];
 
-      // Luckysheet용 셀 데이터 변환
-      // json은 2차원 배열(row, col) 형태
-      const celldata = [];
-      for (let r=0; r<json.length; r++) {
-        if(!json[r]) continue;
-        for (let c=0; c<json[r].length; c++) {
-          if(json[r][c] !== undefined && json[r][c] !== null && json[r][c] !== "") {
-            celldata.push({
-              r: r,
-              c: c,
-              v: json[r][c]
-            });
+      sheets.forEach((sheetName, idx) => {
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet, {header:1, raw:false});
+        // console.log(sheetName, json);
+
+        const celldata = [];
+        for (let r=0; r<json.length; r++) {
+          if(!json[r]) continue;
+          for (let c=0; c<json[r].length; c++) {
+            if(json[r][c] !== undefined && json[r][c] !== null && json[r][c] !== "") {
+              celldata.push({
+                r: r,
+                c: c,
+                v: json[r][c]
+              });
+            }
           }
         }
-      }
 
-      luckysheetData.push({
-        name: sheetName,
-        index: idx,
-        color: "",
-        status: "1",
-        order: idx,
-        row: json.length || 100,
-        column: json[0] ? json[0].length : 26,
-        celldata: celldata
+        luckysheetData.push({
+          name: sheetName,
+          index: idx,
+          color: "",
+          status: "1",
+          order: idx,
+          row: json.length || 100,
+          column: json[0] ? json[0].length : 26,
+          celldata: celldata
+        });
       });
-    });
 
-    return luckysheetData;
-  }
+      return luckysheetData;
+    }
 
-  // 파일 선택 이벤트 처리
-  document.getElementById("input-excel").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const data = new Uint8Array(event.target.result);
-      const workbook = XLSX.read(data, {type: "array"});
-
-      const luckysheetData = excelToLuckysheet(workbook);
-
-      // Luckysheet 초기화 및 데이터 표시
+    // Luckysheet 초기화 함수 (최초 1회)
+    function initLuckysheet() {
       luckysheet.create({
         container: 'luckysheet',
-        data: luckysheetData,
         lang: 'ko',
-        allowEdit: false,  // 읽기 전용 모드 (원하면 true로 변경 가능)
+        data: [],
         showinfobar: true,
         showtoolbar: true,
         showsheetbar: true,
-        columnlen: {},  // 필요시 컬럼 넓이 지정 가능
-        rowlen: {},     // 필요시 행 높이 지정 가능
+        allowEdit: true,
       });
-    };
-    reader.readAsArrayBuffer(file);
-  });
-</script>
+      luckysheetInitialized = true;
+    }
+
+    // 파일 선택 이벤트
+    document.getElementById("input-excel").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, {type: "array"});
+
+        const luckysheetData = excelToLuckysheet(workbook);
+        console.log("Luckysheet Data:", luckysheetData);
+
+        if (!luckysheetInitialized) {
+          initLuckysheet();
+        }
+
+        // Luckysheet 데이터 갱신 (기존 데이터 덮어쓰기)
+        luckysheet.setData(luckysheetData);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // 페이지 로드 시 초기화
+    window.onload = function() {
+      initLuckysheet();
+    }
+  </script>
 
 </body>
 </html>
